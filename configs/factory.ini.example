@@ -1,0 +1,35 @@
+[env:env_name]
+build_flags = 
+    ; ### Basic options ###
+    ; Set FDEBUG to 1 to enable detailed stats
+    -D FDEBUG=1
+    ; Serial baud rate
+    -D FSERIAL_BAUD=115200
+    ; Web Server Port
+    -D FWEB_SERVER_PORT=80
+    ; MDNS Hostname
+    -D FMDNS_HOST='"telebyte"'
+
+    ; ### Sensors etc Settings ###
+    ; - FSR for sensing phone placement
+    -D FFSR_PHONE=34
+    -D FFSR_PHONE_THRESHOLD=200
+    ; - PCA9685 Upper body servo pins
+    -D FPCA_UL1=1
+    -D FPCA_UL2=2
+    -D FPCA_UL3=3
+    -D FPCA_UR1=4
+    -D FPCA_UR2=5
+    -D FPCA_UR3=6
+    ; - OSOYOO SG90 specific PWM min/max values
+    -D FOSOYOO_SG90_PWM_MIN=125
+    -D FOSOYOO_SG90_PWM_MAX=525
+
+    ; ### Secrets ###
+    ; - Wifi options
+    -D FWIFI_SSID='"ssid"'
+    -D FWIFI_PWD='"pwd"'
+
+    ; - Access Point options
+    -D FWIFI_SSID_AP='"TELEBYTE-AP"'
+    -D FWIFI_PWD_AP='"12345"'
