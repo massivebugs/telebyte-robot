@@ -98,6 +98,35 @@ public:
         return sg90PWMMax;
     }
 
+    std::string toJSON()
+    {
+        JsonDocument doc;
+
+        doc["DEBUG"] = debug;
+        doc["SERIAL_BAUD"] = serialBaud;
+        doc["WEB_SERVER_PORT"] = webServerPort;
+        doc["MDNS_HOST"] = mdnsHost;
+        doc["FSR_PHONE"] = fsrPhone;
+        doc["FSR_PHONE_THRESHOLD"] = fsrPhoneThreshold;
+        doc["PCA_UL1"] = pcaUL1;
+        doc["PCA_UL2"] = pcaUL2;
+        doc["PCA_UL3"] = pcaUL3;
+        doc["PCA_UR1"] = pcaUR1;
+        doc["PCA_UR2"] = pcaUR2;
+        doc["PCA_UR3"] = pcaUR3;
+        doc["OSOYOO_SG90_PWM_MIN"] = sg90PWMMin;
+        doc["OSOYOO_SG90_PWM_MAX"] = sg90PWMMax;
+        doc["WIFI_SSID"] = wifiSSID;
+        doc["WIFI_PWD"] = wifiPWD;
+        doc["WIFI_SSID_AP"] = wifiSSID_AP;
+        doc["WIFI_PWD_AP"] = wifiPWD_AP;
+
+        std::string output;
+        serializeJson(doc, output);
+
+        return output;
+    }
+
     // TODO: Create getters for these
     std::string wifiSSID;
     std::string wifiPWD;
@@ -120,4 +149,5 @@ private:
     std::uint16_t sg90PWMMin;
     std::uint16_t sg90PWMMax;
 };
+
 #endif

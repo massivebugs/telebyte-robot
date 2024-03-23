@@ -50,13 +50,15 @@ private:
         // Command
         systems.webServer.POST("/api/command", [&](AsyncWebServerRequest *request, JsonVariant &json)
                                { 
-                                JsonObject jsonObj = json.as<JsonObject>();
                                 std::string command = json["c"];
-
                                 auto result = systems.cli.parse(command.c_str());
-                                handleCommand(result);
 
+                                handleCommand(result);
                                 request->send(200, WebServer::CONTENT_TYPE_JSON, "{\"status\":\"OK\"}"); });
+
+        // List config
+        systems.webServer.GET("/api/config", [&](AsyncWebServerRequest *request)
+                              { request->send(200, WebServer::CONTENT_TYPE_JSON, systems.config.toJSON().c_str()); });
     }
 
     static constexpr const char *COMMAND_PING{"ping"};
