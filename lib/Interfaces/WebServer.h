@@ -7,6 +7,8 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <ESPmDNS.h>
+#include <ArduinoJson.h>
+#include <AsyncJson.h>
 
 class WebServer
 {
@@ -26,6 +28,8 @@ public:
     void GET(const char *path, ArRequestHandlerFunction handler);
 
     void POST(const char *path, ArRequestHandlerFunction handler);
+
+    void POST(const char *path, ArJsonRequestHandlerFunction handler);
 
     void listen();
 

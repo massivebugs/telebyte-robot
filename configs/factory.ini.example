@@ -2,6 +2,7 @@
 build_flags = 
     ; ### Basic options ###
     ; Set FDEBUG to 1 to enable detailed stats
+    ; Enabling debug mode will turn on serial commands and logging
     -D FDEBUG=1
     ; Serial baud rate
     -D FSERIAL_BAUD=115200

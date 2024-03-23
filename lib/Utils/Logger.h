@@ -80,22 +80,36 @@ public:
 
 private:
     Logger() = default;
-    bool enabled{false};
+    bool enabled{true};
     Timer *timer;
+};
+
+/**
+ * @brief Provides functionality for logging messages via WebSockets.
+ */
+class ProductionLogger : public Logger
+{
+public:
+    ProductionLogger(Timer *timer) : Logger(timer) {}
+
+    void logn(const char *label, const std::string &s) override;
+
+private:
+    ProductionLogger() = default;
 };
 
 /**
  * @brief Provides functionality for logging messages to the serial port.
  */
-class SerialLogger : public Logger
+class DebugLogger : public Logger
 {
 public:
-    SerialLogger(Timer *timer) : Logger(timer) {}
+    DebugLogger(Timer *timer) : Logger(timer) {}
 
     void logn(const char *label, const std::string &s) override;
 
 private:
-    SerialLogger() = default;
+    DebugLogger() = default;
 };
 
 #endif

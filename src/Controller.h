@@ -14,12 +14,12 @@ public:
 
     void setup()
     {
-        setupAPI();
         systems.initialize();
         robot.initialize();
+        setupAPI();
     }
 
-    void execute(std::uint16_t delayMs = 500)
+    void execute(std::uint16_t delayMs = 100)
     {
         // TODO: Commands can come from Serial and via Web API
         if (Serial && Serial.available() > 0)
@@ -39,15 +39,19 @@ private:
     {
         // Ping
         systems.webServer.GET("/api/ping", [&](AsyncWebServerRequest *request)
-                              { request->send(200, WebServer::CONTENT_TYPE_JSON, "{\"ping\":\"OK\"}"); });
+                              {
+                                String message = "OK";
+                                if (request->hasArg("msg")) {
+                                    message = request->arg("msg");
+                                }
+
+                                request->send(200, WebServer::CONTENT_TYPE_JSON, "{\"ping\":\"" + message + "\"}"); });
 
         // Command
-        systems.webServer.POST("/api/command", [&](AsyncWebServerRequest *request)
+        systems.webServer.POST("/api/command", [&](AsyncWebServerRequest *request, JsonVariant &json)
                                { 
-                                String command;
-                                if (request->hasArg("c")) {
-                                    command = request->arg("c");
-                                }                                 
+                                JsonObject jsonObj = json.as<JsonObject>();
+                                std::string command = json["c"];
 
                                 auto result = systems.cli.parse(command.c_str());
                                 handleCommand(result);
@@ -55,11 +59,20 @@ private:
                                 request->send(200, WebServer::CONTENT_TYPE_JSON, "{\"status\":\"OK\"}"); });
     }
 
-    static constexpr const char *COMMAND_HELLO_WORLD = "hello_world";
+    static constexpr const char *COMMAND_PING{"ping"};
+    static constexpr const char *COMMAND_HELLO_WORLD{"hello_world"};
     void handleCommand(CLIInput &command)
     {
         // Register command handlers here
-        if (command.name == COMMAND_HELLO_WORLD)
+        if (command.name == COMMAND_PING)
+        {
+            systems.logger->logn("Controller", "ping");
+            for (auto arg : command.args)
+            {
+                systems.logger->logn("Controller", "ping arg: " + arg);
+            }
+        }
+        else if (command.name == COMMAND_HELLO_WORLD)
         {
             systems.events.helloWorld.publish(nullptr);
         }

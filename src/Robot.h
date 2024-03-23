@@ -12,30 +12,30 @@ class Robot
 {
 public:
     Robot(Systems *systems) : systems{systems},
-                              leftShoulder{&systems->pwmDriver, systems->config.pcaUL1, systems->config.sg90PWMMin, systems->config.sg90PWMMax},
-                              leftElbow{&systems->pwmDriver, systems->config.pcaUL2, systems->config.sg90PWMMin, systems->config.sg90PWMMax},
-                              leftWrist{&systems->pwmDriver, systems->config.pcaUL3, systems->config.sg90PWMMin, systems->config.sg90PWMMax},
-                              rightShoulder{&systems->pwmDriver, systems->config.pcaUR1, systems->config.sg90PWMMin, systems->config.sg90PWMMax},
-                              rightElbow{&systems->pwmDriver, systems->config.pcaUR2, systems->config.sg90PWMMin, systems->config.sg90PWMMax},
-                              rightWrist{&systems->pwmDriver, systems->config.pcaUR3, systems->config.sg90PWMMin, systems->config.sg90PWMMax},
+                              leftShoulder{&systems->pwmDriver, systems->config.getPCAUL1Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
+                              leftElbow{&systems->pwmDriver, systems->config.getPCAUL2Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
+                              leftWrist{&systems->pwmDriver, systems->config.getPCAUL3Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
+                              rightShoulder{&systems->pwmDriver, systems->config.getPCAUR1Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
+                              rightElbow{&systems->pwmDriver, systems->config.getPCAUR2Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
+                              rightWrist{&systems->pwmDriver, systems->config.getPCAUR3Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
                               leftArm{Arm::Side::LEFT, &leftShoulder, &leftElbow, &leftWrist},
                               rightArm{Arm::Side::RIGHT, &rightShoulder, &rightElbow, &rightWrist},
-                              fsrPhone{systems->config.fsrPhone}
+                              fsrPhone{systems->config.getFSRPhonePin()}
     {
     }
 
     void initialize()
     {
-        systems->logger.logn("Robot", "Starting initialization!");
-        systems->logger.logn("Robot", "Registering events...");
+        systems->logger->logn("Robot", "Starting initialization!");
+        systems->logger->logn("Robot", "Registering events...");
 
         systems->events.helloWorld.subscribe([&](void *)
                                              { doHello(); });
 
         events.baz.subscribe([&](void *)
-                             { systems->logger.logn("Robot", "bazbaz!"); });
+                             { systems->logger->logn("Robot", "bazbaz!"); });
 
-        systems->logger.logn("Robot", "Registering behaviors...");
+        systems->logger->logn("Robot", "Registering behaviors...");
 
         // TODO: Implement control flow and behaviors
         // sequenceNode1.addChildNode(&foo1);
@@ -45,13 +45,13 @@ public:
         // rootNode.addChildNode(&sequenceNode1);
         // rootNode.addChildNode(&sequenceNode2);
 
-        systems->logger.logn("Robot", "Initialization finished!");
+        systems->logger->logn("Robot", "Initialization finished!");
     }
 
     void executeRoutine()
     {
         fsrPhone.read();
-        if (fsrPhone.getValue() > systems->config.fsrPhoneThreshold)
+        if (fsrPhone.getValue() > systems->config.getFSRPhoneThreshold())
         {
             events.baz.publish(nullptr);
         }
@@ -66,17 +66,17 @@ public:
 
     void doHello()
     {
-        systems->logger.logn("Robot", "Hello, world!");
+        systems->logger->logn("Robot", "Hello, world!");
     }
 
     void logFoo()
     {
-        systems->logger.logn("Robot", "Foo!");
+        systems->logger->logn("Robot", "Foo!");
     }
 
     void logBar()
     {
-        systems->logger.logn("Robot", "Bar!");
+        systems->logger->logn("Robot", "Bar!");
     }
 
     void rotateLeftArm(std::uint16_t shoulderAngle, std::uint16_t elbowAngle, std::uint16_t wristAngle)
@@ -110,7 +110,7 @@ private:
         },
         [&](Robot *robot)
         {
-            systems->logger.logn("Robot", "Foo 1");
+            systems->logger->logn("Robot", "Foo 1");
             return BTNodeStatus::Success;
         },
     };
@@ -121,7 +121,7 @@ private:
         },
         [&](Robot *robot)
         {
-            systems->logger.logn("Robot", "Foo 2");
+            systems->logger->logn("Robot", "Foo 2");
             return BTNodeStatus::Success;
         },
     };
@@ -132,7 +132,7 @@ private:
         },
         [&](Robot *robot)
         {
-            systems->logger.logn("Robot", "Bar 1");
+            systems->logger->logn("Robot", "Bar 1");
             return BTNodeStatus::Success;
         },
     };
@@ -143,7 +143,7 @@ private:
         },
         [&](Robot *robot)
         {
-            systems->logger.logn("Robot", "Bar 2");
+            systems->logger->logn("Robot", "Bar 2");
             return BTNodeStatus::Success;
         },
     };

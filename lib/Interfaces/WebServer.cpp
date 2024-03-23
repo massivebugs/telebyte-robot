@@ -10,6 +10,11 @@ void WebServer::POST(const char *path, ArRequestHandlerFunction handler)
     server.on(path, HTTP_POST, handler);
 }
 
+void WebServer::POST(const char *path, ArJsonRequestHandlerFunction handler)
+{
+    server.addHandler(new AsyncCallbackJsonWebHandler(path, handler));
+}
+
 void WebServer::listen()
 {
     server.begin();

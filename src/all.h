@@ -1,6 +1,8 @@
 #include <cstdint>
 #include <sstream>
 #include <string>
+#include <memory>
+#include <tuple>
 
 #include <Arduino.h>
 #include <Adafruit_PWMServoDriver.h>

@@ -1,7 +1,7 @@
 #include "all.h"
 #include "Controller.h"
 
-constexpr std::uint16_t LOOP_DELAY = 500;
+constexpr std::uint16_t LOOP_DELAY = 20;
 Controller controller{};
 
 void setup(void)
