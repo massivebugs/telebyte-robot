@@ -11,31 +11,33 @@
 class Robot
 {
 public:
-    Robot(Systems *systems) : systems{systems},
-                              leftShoulder{&systems->pwmDriver, systems->config.getPCAUL1Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
-                              leftElbow{&systems->pwmDriver, systems->config.getPCAUL2Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
-                              leftWrist{&systems->pwmDriver, systems->config.getPCAUL3Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
-                              rightShoulder{&systems->pwmDriver, systems->config.getPCAUR1Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
-                              rightElbow{&systems->pwmDriver, systems->config.getPCAUR2Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
-                              rightWrist{&systems->pwmDriver, systems->config.getPCAUR3Pin(), systems->config.getSG90PWMMin(), systems->config.getSG90PWMMax()},
-                              leftArm{Arm::Side::LEFT, &leftShoulder, &leftElbow, &leftWrist},
-                              rightArm{Arm::Side::RIGHT, &rightShoulder, &rightElbow, &rightWrist},
-                              fsrPhone{systems->config.getFSRPhonePin()}
+    void initialize(Config *config, Systems *systems)
     {
-    }
+        m_config = config;
+        m_systems = systems;
 
-    void initialize()
-    {
-        systems->logger->logn("Robot", "Starting initialization!");
-        systems->logger->logn("Robot", "Registering events...");
+        leftShoulder = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUL1Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
+        leftElbow = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUL2Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
+        leftWrist = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUL3Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
+        rightShoulder = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUR1Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
+        rightElbow = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUR2Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
+        rightWrist = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUR3Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
 
-        systems->events.helloWorld.subscribe([&](void *)
-                                             { doHello(); });
+        leftArm = std::unique_ptr<Arm>(new Arm(Arm::Side::LEFT, leftShoulder, leftElbow, leftWrist));
+        rightArm = std::unique_ptr<Arm>(new Arm(Arm::Side::RIGHT, rightShoulder, rightElbow, rightWrist));
+
+        fsrPhone = std::unique_ptr<FSR>(new FSR(config->getFSRPhonePin()));
+
+        m_systems->logger->logn("Robot", "Starting initialization!");
+        m_systems->logger->logn("Robot", "Registering events...");
+
+        m_systems->events.helloWorld.subscribe([&](void *)
+                                               { doHello(); });
 
         events.baz.subscribe([&](void *)
-                             { systems->logger->logn("Robot", "bazbaz!"); });
+                             { m_systems->logger->logn("Robot", "bazbaz!"); });
 
-        systems->logger->logn("Robot", "Registering behaviors...");
+        m_systems->logger->logn("Robot", "Registering behaviors...");
 
         // TODO: Implement control flow and behaviors
         // sequenceNode1.addChildNode(&foo1);
@@ -45,13 +47,13 @@ public:
         // rootNode.addChildNode(&sequenceNode1);
         // rootNode.addChildNode(&sequenceNode2);
 
-        systems->logger->logn("Robot", "Initialization finished!");
+        m_systems->logger->logn("Robot", "Initialization finished!");
     }
 
     void executeRoutine()
     {
-        fsrPhone.read();
-        if (fsrPhone.getValue() > systems->config.getFSRPhoneThreshold())
+        fsrPhone->read();
+        if (fsrPhone->getValue() > m_config->getFSRPhoneThreshold())
         {
             events.baz.publish(nullptr);
         }
@@ -66,27 +68,27 @@ public:
 
     void doHello()
     {
-        systems->logger->logn("Robot", "Hello, world!");
+        m_systems->logger->logn("Robot", "Hello, world!");
     }
 
     void logFoo()
     {
-        systems->logger->logn("Robot", "Foo!");
+        m_systems->logger->logn("Robot", "Foo!");
     }
 
     void logBar()
     {
-        systems->logger->logn("Robot", "Bar!");
+        m_systems->logger->logn("Robot", "Bar!");
     }
 
     void rotateLeftArm(std::uint16_t shoulderAngle, std::uint16_t elbowAngle, std::uint16_t wristAngle)
     {
-        leftArm.rotate(shoulderAngle, elbowAngle, wristAngle);
+        leftArm->rotate(shoulderAngle, elbowAngle, wristAngle);
     }
 
     void rotateRightArm(std::uint16_t shoulderAngle, std::uint16_t elbowAngle, std::uint16_t wristAngle)
     {
-        rightArm.rotate(shoulderAngle, elbowAngle, wristAngle);
+        rightArm->rotate(shoulderAngle, elbowAngle, wristAngle);
     }
 
 public:
@@ -99,7 +101,10 @@ private:
     bool isPhoneSet{false};
 
 private:
-    Systems *systems;
+    // These will live until the lifetime of the Robot
+    Config *m_config;
+    Systems *m_systems;
+
     BTSequenceNode<Robot *> rootNode{};
     BTSequenceNode<Robot *> sequenceNode1{};
     BTSequenceNode<Robot *> sequenceNode2{};
@@ -110,7 +115,7 @@ private:
         },
         [&](Robot *robot)
         {
-            systems->logger->logn("Robot", "Foo 1");
+            m_systems->logger->logn("Robot", "Foo 1");
             return BTNodeStatus::Success;
         },
     };
@@ -121,7 +126,7 @@ private:
         },
         [&](Robot *robot)
         {
-            systems->logger->logn("Robot", "Foo 2");
+            m_systems->logger->logn("Robot", "Foo 2");
             return BTNodeStatus::Success;
         },
     };
@@ -132,7 +137,7 @@ private:
         },
         [&](Robot *robot)
         {
-            systems->logger->logn("Robot", "Bar 1");
+            m_systems->logger->logn("Robot", "Bar 1");
             return BTNodeStatus::Success;
         },
     };
@@ -143,27 +148,26 @@ private:
         },
         [&](Robot *robot)
         {
-            systems->logger->logn("Robot", "Bar 2");
+            m_systems->logger->logn("Robot", "Bar 2");
             return BTNodeStatus::Success;
         },
     };
     BTNodeStatus status{BTNodeStatus::Success};
 
     // Body parts
-    Arm leftArm;
-    Arm rightArm;
+    std::unique_ptr<Arm> leftArm;
+    std::unique_ptr<Arm> rightArm;
 
-    // Sensors
     // Phone mount FSR
-    FSR fsrPhone;
+    std::unique_ptr<FSR> fsrPhone;
 
     // Actuators
-    Servo<Adafruit_PWMServoDriver> leftShoulder;
-    Servo<Adafruit_PWMServoDriver> leftElbow;
-    Servo<Adafruit_PWMServoDriver> leftWrist;
-    Servo<Adafruit_PWMServoDriver> rightShoulder;
-    Servo<Adafruit_PWMServoDriver> rightElbow;
-    Servo<Adafruit_PWMServoDriver> rightWrist;
+    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> leftShoulder;
+    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> leftElbow;
+    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> leftWrist;
+    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> rightShoulder;
+    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> rightElbow;
+    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> rightWrist;
 
     struct SystemEvents
     {

@@ -9,3 +9,4 @@
 #include <Adafruit_BusIO_Register.h>
 #include <Update.h>
 #include <ArduinoJson.h>
+#include <Preferences.h>

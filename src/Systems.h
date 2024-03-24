@@ -13,13 +13,11 @@
 class Systems
 {
 public:
-    Systems() : wifi{config.wifiSSID, config.wifiPWD},
-                webServer{config.getMdnsHost(), config.getWebServerPort()}
+    void initialize(Config &config)
     {
-    }
+        wifi = std::unique_ptr<WifiConnection>(new WifiConnection(config.getWifiSSID(), config.getWifiPwd()));
+        webServer = std::unique_ptr<WebServer>(new WebServer(config.getMdnsHost(), config.getWebServerPort()));
 
-    void initialize()
-    {
         // Enable serial comms if we are in debug mode
         if (config.getDebug())
         {
@@ -39,20 +37,20 @@ public:
         timer.reset();
 
         logger->logn("Systems", "Connecting to Wi-Fi...");
-        wifi.connect();
+        wifi->connect();
 
-        logger->logn("Systems", "IP Address is: " + wifi.getLocalIP());
+        logger->logn("Systems", "IP Address is: " + wifi->getLocalIP());
 
         logger->logn("Systems", "Starting API Server...");
         try
         {
-            webServer.startMDNSResponder();
+            webServer->startMDNSResponder();
         }
         catch (WebServer::MDNSResponderSetupFailed &e)
         {
             logger->logn("Systems", e.what());
         }
-        webServer.listen();
+        webServer->listen();
 
         logger->logn("Systems", "Setting PWM Driver...");
         pwmDriver.begin();
@@ -62,13 +60,13 @@ public:
     }
 
 public:
-    Config config{};
     Timer timer{};
     Adafruit_PWMServoDriver pwmDriver{};
     CLI cli{};
+
     std::unique_ptr<Logger> logger;
-    WifiConnection wifi;
-    WebServer webServer;
+    std::unique_ptr<WifiConnection> wifi;
+    std::unique_ptr<WebServer> webServer;
 
     struct SystemEvents
     {

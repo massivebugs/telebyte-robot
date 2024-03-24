@@ -15,12 +15,12 @@ public:
 
     Arm(
         Side ap,
-        Servo<Adafruit_PWMServoDriver> *shoulder,
-        Servo<Adafruit_PWMServoDriver> *elbow,
-        Servo<Adafruit_PWMServoDriver> *wrist) : ap{ap},
-                                                 shoulder{shoulder},
-                                                 elbow{elbow},
-                                                 wrist{wrist}
+        std::shared_ptr<Servo<Adafruit_PWMServoDriver>> shoulder,
+        std::shared_ptr<Servo<Adafruit_PWMServoDriver>> elbow,
+        std::shared_ptr<Servo<Adafruit_PWMServoDriver>> wrist) : ap{ap},
+                                                                 shoulder{shoulder},
+                                                                 elbow{elbow},
+                                                                 wrist{wrist}
     {
     }
 
@@ -33,9 +33,9 @@ public:
 
 private:
     Side ap;
-    Servo<Adafruit_PWMServoDriver> *shoulder;
-    Servo<Adafruit_PWMServoDriver> *elbow;
-    Servo<Adafruit_PWMServoDriver> *wrist;
+    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> shoulder;
+    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> elbow;
+    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> wrist;
 };
 
 #endif
