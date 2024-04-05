@@ -1,8 +1,9 @@
-#ifndef BEHAVIOR_TREE
-#define BEHAVIOR_TREE
+#ifndef BEHAVIOR_TREE_BEHAVIOR_TREE
+#define BEHAVIOR_TREE_BEHAVIOR_TREE
 
 #include <functional>
 #include <vector>
+#include <memory>
 
 /**
  * @file BehaviorTree.h
@@ -92,7 +93,7 @@ class IBTCompositeNode
 protected:
     // Index of the current child node being processed.
     int current;
-    std::vector<IBTNode<T> *> children;
+    std::vector<std::unique_ptr<IBTNode<T>>> children;
 
 public:
     /**
@@ -100,9 +101,9 @@ public:
      *
      * @param node
      */
-    void addChildNode(IBTNode<T> *node)
+    void addChildNode(std::unique_ptr<IBTNode<T>> node)
     {
-        children.push_back(node);
+        children.push_back(std::move(node));
     }
 
     /**
@@ -113,7 +114,7 @@ public:
     void initializeChildNodes(T ctx)
     {
         current = 0;
-        for (auto child : children)
+        for (auto &child : children)
         {
             child->initialize(ctx);
         }
@@ -133,7 +134,7 @@ class IBTDecoratorNode
 protected:
     // Flag indicating whether the decorator node is currently running.
     bool isRunning;
-    IBTNode<T> *child;
+    std::unique_ptr<IBTNode<T>> child;
 
 public:
     /**
@@ -141,9 +142,9 @@ public:
      *
      * @param node
      */
-    void setChildNode(IBTNode<T> *node)
+    void setChildNode(std::unique_ptr<IBTNode<T>> node)
     {
-        child = node;
+        child = std::move(node);
     }
 
     /**
