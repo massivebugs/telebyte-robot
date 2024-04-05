@@ -10,13 +10,15 @@ void Controller::setupAPIEndpoints()
                                     message = request->arg("msg");
                                 }
 
-                                request->send(200, WebServer::CONTENT_TYPE_JSON, "{\"ping\":\"" + message + "\"}"); });
+                                request->send(200, WebServer::CONTENT_TYPE_JSON, "{\"pong\":\"" + message + "\"}"); });
 
     // Command
     systems.webServer->POST("/api/command", [&](AsyncWebServerRequest *request, JsonVariant &json)
                             { 
                                 std::string command = json["c"];
                                 auto result = systems.cli.parse(command.c_str());
+
+                                handleDebugCommand(result);
 
                                 request->send(200, WebServer::CONTENT_TYPE_JSON, "{\"status\":\"OK\"}"); });
 

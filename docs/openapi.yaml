@@ -1,0 +1,69 @@
+openapi: "3.0.3"
+
+info:
+  title: telebyte-robot
+  version: 1.0.0
+
+servers:
+- url: "http://telebyte.local"
+
+paths:
+  /api/ping:
+    get:
+      description: ping pong back a passthrough message
+      parameters:
+        - name: msg
+          in: query
+          example: foo
+          description: Message to include in the ping response
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pong:
+                    type: string
+                    description: What you passed in <msg> param
+                    example: OK
+  /api/command:
+    post:
+      description: Send a debug command
+      requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      c:
+                        type: string
+                        description: command name + args (space delimited)
+                        example: somecommand arg1 arg2
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: OK or FAIL
+                    example: OK
+  /api/config:
+    get:
+      description: Get the current configurations of the robot
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
