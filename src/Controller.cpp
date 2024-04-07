@@ -39,4 +39,35 @@ void Controller::handleDebugCommand(CLIInput &command)
     {
         systems.events.helloWorld.publish(nullptr);
     }
+    else if (command.name == "servo")
+    {
+        auto servo = command.args[0];
+        auto val = command.args[1];
+        int valn = std::stoi(val);
+
+        if (servo == "leftShoulder")
+        {
+            robot.leftArm->rotateShoulder(valn);
+        }
+        if (servo == "leftElbow")
+        {
+            robot.leftArm->rotateElbow(valn);
+        }
+        if (servo == "leftWrist")
+        {
+            robot.leftArm->rotateWrist(valn);
+        }
+        if (servo == "rightShoulder")
+        {
+            robot.rightArm->rotateShoulder(valn);
+        }
+        if (servo == "rightElbow")
+        {
+            robot.rightArm->rotateElbow(valn);
+        }
+        if (servo == "rightWrist")
+        {
+            robot.rightArm->rotateWrist(valn);
+        }
+    }
 }

@@ -52,34 +52,34 @@ public:
         return fsrPhoneThreshold;
     }
 
-    std::uint16_t getPCAUL1Pin()
+    std::uint16_t getPCALeftShoulderPin()
     {
-        return pcaUL1;
+        return pcaLeftShoulderPin;
     }
 
-    std::uint16_t getPCAUL2Pin()
+    std::uint16_t getPCALeftElbowPin()
     {
-        return pcaUL2;
+        return pcaLeftElbowPin;
     }
 
-    std::uint16_t getPCAUL3Pin()
+    std::uint16_t getPCALeftWristPin()
     {
-        return pcaUL3;
+        return pcaLeftWristPin;
     }
 
-    std::uint16_t getPCAUR1Pin()
+    std::uint16_t getPCARightShoulderPin()
     {
-        return pcaUR1;
+        return pcaRightShoulderPin;
     }
 
-    std::uint16_t getPCAUR2Pin()
+    std::uint16_t getPCARightElbowPin()
     {
-        return pcaUR2;
+        return pcaRightElbowPin;
     }
 
-    std::uint16_t getPCAUR3Pin()
+    std::uint16_t getPCARightWristPin()
     {
-        return pcaUR3;
+        return pcaRightWristPin;
     }
 
     std::uint16_t getSG90PWMMin()
@@ -122,12 +122,12 @@ public:
         doc["MDNS_HOST"] = mdnsHost;
         doc["FSR_PHONE"] = fsrPhone;
         doc["FSR_PHONE_THRESHOLD"] = fsrPhoneThreshold;
-        doc["PCA_UL1"] = pcaUL1;
-        doc["PCA_UL2"] = pcaUL2;
-        doc["PCA_UL3"] = pcaUL3;
-        doc["PCA_UR1"] = pcaUR1;
-        doc["PCA_UR2"] = pcaUR2;
-        doc["PCA_UR3"] = pcaUR3;
+        doc["PCA_LEFT_SHOULDER_PIN"] = pcaLeftShoulderPin;
+        doc["PCA_LEFT_ELBOW_PIN"] = pcaLeftElbowPin;
+        doc["PCA_LEFT_WRIST_PIN"] = pcaLeftWristPin;
+        doc["PCA_RIGHT_SHOULDER_PIN"] = pcaRightShoulderPin;
+        doc["PCA_RIGHT_ELBOW_PIN"] = pcaRightElbowPin;
+        doc["PCA_RIGHT_WRIST_PIN"] = pcaRightWristPin;
         doc["OSOYOO_SG90_PWM_MIN"] = sg90PWMMin;
         doc["OSOYOO_SG90_PWM_MAX"] = sg90PWMMax;
         doc["WIFI_SSID"] = wifiSSID;
@@ -151,12 +151,12 @@ private:
     std::string mdnsHost;
     std::uint16_t fsrPhone;
     std::uint16_t fsrPhoneThreshold;
-    std::uint16_t pcaUL1;
-    std::uint16_t pcaUL2;
-    std::uint16_t pcaUL3;
-    std::uint16_t pcaUR1;
-    std::uint16_t pcaUR2;
-    std::uint16_t pcaUR3;
+    std::uint16_t pcaLeftShoulderPin;
+    std::uint16_t pcaLeftElbowPin;
+    std::uint16_t pcaLeftWristPin;
+    std::uint16_t pcaRightShoulderPin;
+    std::uint16_t pcaRightElbowPin;
+    std::uint16_t pcaRightWristPin;
     std::uint16_t sg90PWMMin;
     std::uint16_t sg90PWMMax;
     std::string wifiSSID;
@@ -172,12 +172,12 @@ private:
         mdnsHost = pref.getString("mdnsHost", FMDNS_HOST).c_str();
         fsrPhone = pref.getUShort("fsrPhone", FFSR_PHONE);
         fsrPhoneThreshold = pref.getUShort("fsrPhoneThreshold", FFSR_PHONE_THRESHOLD);
-        pcaUL1 = pref.getUShort("pcaUL1", FPCA_UL1);
-        pcaUL2 = pref.getUShort("pcaUL2", FPCA_UL2);
-        pcaUL3 = pref.getUShort("pcaUL3", FPCA_UL3);
-        pcaUR1 = pref.getUShort("pcaUR1", FPCA_UR1);
-        pcaUR2 = pref.getUShort("pcaUR2", FPCA_UR2);
-        pcaUR3 = pref.getUShort("pcaUR3", FPCA_UR3);
+        pcaLeftShoulderPin = pref.getUShort("pcaLeftShoulderPin", FPCA_LEFT_SHOULDER_PIN);
+        pcaLeftElbowPin = pref.getUShort("pcaLeftElbowPin", FPCA_LEFT_ELBOW_PIN);
+        pcaLeftWristPin = pref.getUShort("pcaLeftWristPin", FPCA_LEFT_WRIST_PIN);
+        pcaRightShoulderPin = pref.getUShort("pcaRightShoulderPin", FPCA_RIGHT_SHOULDER_PIN);
+        pcaRightElbowPin = pref.getUShort("pcaRightElbowPin", FPCA_RIGHT_ELBOW_PIN);
+        pcaRightWristPin = pref.getUShort("pcaRightWristPin", FPCA_RIGHT_WRIST_PIN);
         sg90PWMMin = pref.getUShort("sg90PWMMin", FOSOYOO_SG90_PWM_MIN);
         sg90PWMMax = pref.getUShort("sg90PWMMax", FOSOYOO_SG90_PWM_MAX);
         wifiSSID = pref.getString("wifiSSID", FWIFI_SSID).c_str();

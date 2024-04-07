@@ -38,6 +38,13 @@ public:
         // TODO
     } events;
 
+    // Body parts
+    std::unique_ptr<Arm> leftArm;
+    std::unique_ptr<Arm> rightArm;
+
+    // Phone mount FSR
+    std::unique_ptr<FSR> fsrPhone;
+
 private:
     void registerEvents();
     void doHelloWorld();
@@ -46,21 +53,6 @@ private:
     // These will live until the lifetime of the Robot
     Config *m_config;
     Systems *m_systems;
-
-    // Body parts
-    std::unique_ptr<Arm> leftArm;
-    std::unique_ptr<Arm> rightArm;
-
-    // Phone mount FSR
-    std::unique_ptr<FSR> fsrPhone;
-
-    // Actuators
-    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> leftShoulder;
-    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> leftElbow;
-    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> leftWrist;
-    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> rightShoulder;
-    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> rightElbow;
-    std::shared_ptr<Servo<Adafruit_PWMServoDriver>> rightWrist;
 
     BTNodeStatus status{BTNodeStatus::Success};
 };

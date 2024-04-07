@@ -13,6 +13,15 @@ void Controller::setupBehaviors()
         [&](BehaviorContext *ctx) {},
         [&](BehaviorContext *ctx)
         {
+            if (!ctx->isActive)
+            {
+                // TEST - Do hello animation
+                systems.logger->logn("leafNode_SetActive", "Doing hello animation TEST");
+                robot.leftArm->rotate(130, 40, 170);
+                robot.rightArm->rotate(140, 40, 70);
+                delay(1000);
+            }
+
             ctx->isActive = true;
             return BTNodeStatus::Success;
         })};
@@ -20,7 +29,6 @@ void Controller::setupBehaviors()
         [&](BehaviorContext *ctx) {},
         [&](BehaviorContext *ctx)
         {
-            systems.logger->logn("leafNode_LogEndOfSequence", "END OF MAIN SEQUENCE");
             return BTNodeStatus::Success;
         })};
     auto seqNode_MainSequence = std::unique_ptr<BTSequenceNode<BehaviorContext *>>{new BTSequenceNode<BehaviorContext *>()};
@@ -47,7 +55,10 @@ void Controller::setupBehaviors()
         [&](BehaviorContext *ctx) {},
         [&](BehaviorContext *ctx)
         {
-            systems.logger->logn("leafNode_ResetArms", "RESET ARMS");
+            systems.logger->logn("leafNode_ResetArms", "Resetting arm positions");
+            robot.leftArm->rotate(45, 135, 125);
+            robot.rightArm->rotate(115, 15, 35);
+            delay(1000);
             return BTNodeStatus::Success;
         })};
 

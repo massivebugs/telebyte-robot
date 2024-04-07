@@ -5,12 +5,12 @@ void Robot::initialize(Config *config, Systems *systems)
     m_config = config;
     m_systems = systems;
 
-    leftShoulder = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUL1Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
-    leftElbow = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUL2Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
-    leftWrist = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUL3Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
-    rightShoulder = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUR1Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
-    rightElbow = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUR2Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
-    rightWrist = std::shared_ptr<Servo<Adafruit_PWMServoDriver>>(new Servo<Adafruit_PWMServoDriver>(&systems->pwmDriver, config->getPCAUR3Pin(), config->getSG90PWMMin(), config->getSG90PWMMax()));
+    auto leftShoulder = Servo<Adafruit_PWMServoDriver>{&systems->pwmDriver, config->getPCALeftShoulderPin(), config->getSG90PWMMin(), config->getSG90PWMMax()};
+    auto leftElbow = Servo<Adafruit_PWMServoDriver>{&systems->pwmDriver, config->getPCALeftElbowPin(), config->getSG90PWMMin(), config->getSG90PWMMax()};
+    auto leftWrist = Servo<Adafruit_PWMServoDriver>{&systems->pwmDriver, config->getPCALeftWristPin(), config->getSG90PWMMin(), config->getSG90PWMMax()};
+    auto rightShoulder = Servo<Adafruit_PWMServoDriver>{&systems->pwmDriver, config->getPCARightShoulderPin(), config->getSG90PWMMin(), config->getSG90PWMMax()};
+    auto rightElbow = Servo<Adafruit_PWMServoDriver>{&systems->pwmDriver, config->getPCARightElbowPin(), config->getSG90PWMMin(), config->getSG90PWMMax()};
+    auto rightWrist = Servo<Adafruit_PWMServoDriver>{&systems->pwmDriver, config->getPCARightWristPin(), config->getSG90PWMMin(), config->getSG90PWMMax()};
 
     leftArm = std::unique_ptr<Arm>(new Arm(Arm::Side::LEFT, leftShoulder, leftElbow, leftWrist));
     rightArm = std::unique_ptr<Arm>(new Arm(Arm::Side::RIGHT, rightShoulder, rightElbow, rightWrist));

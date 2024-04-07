@@ -14,14 +14,14 @@ build_flags =
     ; ### Sensors etc Settings ###
     ; - FSR for sensing phone placement
     -D FFSR_PHONE=34
-    -D FFSR_PHONE_THRESHOLD=200
+    -D FFSR_PHONE_THRESHOLD=100
     ; - PCA9685 Upper body servo pins
-    -D FPCA_UL1=1
-    -D FPCA_UL2=2
-    -D FPCA_UL3=3
-    -D FPCA_UR1=4
-    -D FPCA_UR2=5
-    -D FPCA_UR3=6
+    -D FPCA_LEFT_SHOULDER_PIN=1
+    -D FPCA_LEFT_ELBOW_PIN=2
+    -D FPCA_LEFT_WRIST_PIN=3
+    -D FPCA_RIGHT_SHOULDER_PIN=4
+    -D FPCA_RIGHT_ELBOW_PIN=5
+    -D FPCA_RIGHT_WRIST_PIN=6
     ; - OSOYOO SG90 specific PWM min/max values
     -D FOSOYOO_SG90_PWM_MIN=125
     -D FOSOYOO_SG90_PWM_MAX=525
