@@ -5,6 +5,8 @@
 #include "Systems.h"
 #include "Robot.h"
 #include "BehaviorTree.h"
+#include "Animations.h"
+#include "Arm.h"
 
 struct BehaviorContext
 {
@@ -28,6 +30,18 @@ private:
     Robot robot{};
     BehaviorContext ctx;
     BTSequenceNode<BehaviorContext *> rootNode{};
+};
+
+// ##### Custom Behavior Nodes ##### //
+class ResetRobotPositionNode : public BTLeafNode<BehaviorContext *>
+{
+public:
+    ResetRobotPositionNode(std::uint16_t totalDurationMs, Timer *timer, Robot *robot);
+
+private:
+    Timer *m_timer;
+    AnimationRotateArm m_animationLeftArm;
+    AnimationRotateArm m_animationRightArm;
 };
 
 #endif

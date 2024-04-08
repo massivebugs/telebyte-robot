@@ -17,8 +17,8 @@ void Controller::setupBehaviors()
             {
                 // TEST - Do hello animation
                 systems.logger->logn("leafNode_SetActive", "Doing hello animation TEST");
-                robot.leftArm->rotate(130, 40, 170);
-                robot.rightArm->rotate(140, 40, 70);
+                robot.leftArm->rotate(140, 40, 70);
+                robot.rightArm->rotate(130, 40, 170);
                 delay(1000);
             }
 
@@ -51,16 +51,7 @@ void Controller::setupBehaviors()
         })};
 
     // ##### INACTIVE TRANSITION BEHAVIOR ##### //
-    auto leafNode_ResetArms = std::unique_ptr<BTLeafNode<BehaviorContext *>>{new BTLeafNode<BehaviorContext *>(
-        [&](BehaviorContext *ctx) {},
-        [&](BehaviorContext *ctx)
-        {
-            systems.logger->logn("leafNode_ResetArms", "Resetting arm positions");
-            robot.leftArm->rotate(45, 135, 125);
-            robot.rightArm->rotate(115, 15, 35);
-            delay(1000);
-            return BTNodeStatus::Success;
-        })};
+    auto leafNode_ResetArms = std::unique_ptr<ResetRobotPositionNode>{new ResetRobotPositionNode(1000, &systems.timer, &robot)};
 
     auto leafNode_EmitInactive = std::unique_ptr<BTLeafNode<BehaviorContext *>>{new BTLeafNode<BehaviorContext *>(
         [&](BehaviorContext *ctx) {},
@@ -82,4 +73,28 @@ void Controller::setupBehaviors()
     selNode_RootSelector->addChildNode(std::move(seqNode_MainInactiveSequence));
 
     rootNode.addChildNode(std::move(selNode_RootSelector));
+}
+
+ResetRobotPositionNode::ResetRobotPositionNode(
+    std::uint16_t totalDurationMs,
+    Timer *timer,
+    Robot *robot)
+    : m_timer{timer},
+      m_animationLeftArm{totalDurationMs, robot->leftArm, Arm::Angles<std::int32_t>{115, 15, 35}},
+      m_animationRightArm{totalDurationMs, robot->rightArm, Arm::Angles<std::int32_t>{45, 135, 125}},
+      BTLeafNode{
+          [&](BehaviorContext *ctx)
+          {
+              m_animationLeftArm.reset();
+              m_animationRightArm.reset();
+          },
+          [&](BehaviorContext *ctx)
+          {
+              auto r1 = m_animationLeftArm.animate(m_timer->getElapsedMilliseconds());
+              auto r2 = m_animationRightArm.animate(m_timer->getElapsedMilliseconds());
+
+              return r1 && r2 ? BTNodeStatus::Success
+                              : BTNodeStatus::Running;
+          }}
+{
 }

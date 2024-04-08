@@ -12,8 +12,8 @@ void Robot::initialize(Config *config, Systems *systems)
     auto rightElbow = Servo<Adafruit_PWMServoDriver>{&systems->pwmDriver, config->getPCARightElbowPin(), config->getSG90PWMMin(), config->getSG90PWMMax()};
     auto rightWrist = Servo<Adafruit_PWMServoDriver>{&systems->pwmDriver, config->getPCARightWristPin(), config->getSG90PWMMin(), config->getSG90PWMMax()};
 
-    leftArm = std::unique_ptr<Arm>(new Arm(Arm::Side::LEFT, leftShoulder, leftElbow, leftWrist));
-    rightArm = std::unique_ptr<Arm>(new Arm(Arm::Side::RIGHT, rightShoulder, rightElbow, rightWrist));
+    leftArm = std::shared_ptr<Arm>(new Arm(Arm::Side::LEFT, leftShoulder, leftElbow, leftWrist));
+    rightArm = std::shared_ptr<Arm>(new Arm(Arm::Side::RIGHT, rightShoulder, rightElbow, rightWrist));
 
     fsrPhone = std::unique_ptr<FSR>(new FSR(config->getFSRPhonePin()));
 

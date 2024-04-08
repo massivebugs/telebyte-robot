@@ -39,8 +39,8 @@ public:
     } events;
 
     // Body parts
-    std::unique_ptr<Arm> leftArm;
-    std::unique_ptr<Arm> rightArm;
+    std::shared_ptr<Arm> leftArm;
+    std::shared_ptr<Arm> rightArm;
 
     // Phone mount FSR
     std::unique_ptr<FSR> fsrPhone;

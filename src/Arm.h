@@ -13,6 +13,23 @@ public:
         RIGHT
     };
 
+    template <typename T>
+    struct Angles
+    {
+        T shoulder;
+        T elbow;
+        T wrist;
+
+        template <typename std::enable_if<std::is_same<T, std::int32_t>::value, int>::type = 0>
+        Angles operator-(const Angles<T> &other) const
+        {
+            return Angles<T>{
+                shoulder - other.shoulder,
+                elbow - other.elbow,
+                wrist - other.wrist};
+        }
+    };
+
     Arm(
         Side ap,
         Servo<Adafruit_PWMServoDriver> shoulder,
@@ -44,6 +61,16 @@ public:
     void rotateWrist(uint16_t angle)
     {
         wrist.rotate(angle);
+    }
+
+    template <typename T>
+    Angles<T> getAngles()
+    {
+        return Angles<T>{
+            shoulder.getAngle(),
+            elbow.getAngle(),
+            wrist.getAngle(),
+        };
     }
 
 private:

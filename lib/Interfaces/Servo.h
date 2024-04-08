@@ -60,7 +60,7 @@ private:
     std::uint16_t pinNum;
     std::uint16_t angleMin;
     std::uint16_t angleMax;
-    std::uint16_t angle = 0;
+    std::uint16_t angle{0};
 
     std::uint16_t adjustAngleMinMax(std::uint16_t angle)
     {
