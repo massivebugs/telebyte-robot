@@ -32,11 +32,29 @@ private:
     BTSequenceNode<BehaviorContext *> rootNode{};
 };
 
-// ##### Custom Behavior Nodes ##### //
-class ResetRobotPositionNode : public BTLeafNode<BehaviorContext *>
+// ##### Custom leaf node definitions ##### //
+
+class RobotHelloWorldNode : public BTLeafNode<BehaviorContext *>
 {
 public:
-    ResetRobotPositionNode(std::uint16_t totalDurationMs, Timer *timer, Robot *robot);
+    RobotHelloWorldNode(Timer *timer, Robot *robot);
+
+private:
+    Timer *m_timer;
+
+    // ----- Animation Sequences ----- //
+    // To position
+    AnimationRotateArm m_animationLeftArmReady;
+    AnimationRotateArm m_animationRightArmReady;
+    // Wave hand
+    AnimationRotateArm m_animationLeftArmWave;
+    AnimationRotateArm m_animationRightArmWave;
+};
+
+class RobotResetPositionNode : public BTLeafNode<BehaviorContext *>
+{
+public:
+    RobotResetPositionNode(std::uint16_t totalDurationMs, Timer *timer, Robot *robot);
 
 private:
     Timer *m_timer;

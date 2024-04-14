@@ -25,6 +25,11 @@ void Robot::initialize(Config *config, Systems *systems)
     m_systems->logger->logn("Robot", "Initialization finished!");
 }
 
+bool Robot::isPhoneSet()
+{
+    return fsrPhone->getValue() >= m_config->getFSRPhoneThreshold();
+}
+
 void Robot::registerEvents()
 {
     m_systems->events.helloWorld.subscribe([&](void *)
