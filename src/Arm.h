@@ -41,24 +41,24 @@ public:
     {
     }
 
-    void rotate(uint16_t shoulderAngle, uint16_t elbowAngle, uint16_t wristAngle)
+    void rotate(std::uint16_t shoulderAngle, std::uint16_t elbowAngle, std::uint16_t wristAngle)
     {
         shoulder.rotate(shoulderAngle);
         elbow.rotate(elbowAngle);
         wrist.rotate(wristAngle);
     }
 
-    void rotateShoulder(uint16_t angle)
+    void rotateShoulder(std::uint16_t angle)
     {
         shoulder.rotate(angle);
     }
 
-    void rotateElbow(uint16_t angle)
+    void rotateElbow(std::uint16_t angle)
     {
         elbow.rotate(angle);
     }
 
-    void rotateWrist(uint16_t angle)
+    void rotateWrist(std::uint16_t angle)
     {
         wrist.rotate(angle);
     }

@@ -7,8 +7,6 @@ this is a work in progress. I'm a beginner in anything of this sort so I'm expec
 
 The robot is designed to be controlled through WebRTC (p2p, 1 to 1), forwarding commands from the opposite peer to Telebyte remotely.
 
-_TODO: Insert photo of robot_
-
 ## Control interface
 
 ### Web API endpoints

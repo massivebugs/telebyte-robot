@@ -27,7 +27,7 @@ void Robot::initialize(Config *config, Systems *systems)
 
 bool Robot::isPhoneSet()
 {
-    return fsrPhone->getValue() >= m_config->getFSRPhoneThreshold();
+    return fsrPhone->read() >= m_config->getFSRPhoneThreshold();
 }
 
 void Robot::registerEvents()

@@ -51,10 +51,10 @@ private:
     AnimationRotateArm m_animationRightArmWave;
 };
 
-class RobotResetPositionNode : public BTLeafNode<BehaviorContext *>
+class RobotResetPostureNode : public BTLeafNode<BehaviorContext *>
 {
 public:
-    RobotResetPositionNode(std::uint16_t totalDurationMs, Timer *timer, Robot *robot);
+    RobotResetPostureNode(std::uint16_t totalDurationMs, Timer *timer, Robot *robot);
 
 private:
     Timer *m_timer;

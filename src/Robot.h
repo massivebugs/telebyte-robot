@@ -16,12 +16,6 @@ public:
     template <typename T>
     void executeRoutine(IBTNode<T> &rootNode, T ctx)
     {
-        fsrPhone->read();
-        if (fsrPhone->getValue() > m_config->getFSRPhoneThreshold())
-        {
-            // TODO
-        }
-
         if (status != BTNodeStatus::Running)
         {
             rootNode.initialize(ctx);

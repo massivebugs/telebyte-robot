@@ -10,7 +10,6 @@ void Controller::setup()
     setupBehaviors();
 
     // Reset to robot's initial position
-    // TODO: Move to different place
     robot.leftArm->rotate(115, 15, 35);
     robot.rightArm->rotate(45, 135, 125);
 }
@@ -163,8 +162,8 @@ void Controller::setupBehaviors()
         })};
     // Sequence:MainInactiveSequence
     auto seqNode_MainInactiveSequence = std::unique_ptr<BTSequenceNode<BehaviorContext *>>{new BTSequenceNode<BehaviorContext *>()};
-    // Leaf:ResetArms
-    auto leafNode_ResetArms = std::unique_ptr<RobotResetPositionNode>{new RobotResetPositionNode(1200, &systems.timer, &robot)};
+    // Leaf:ResetPosture
+    auto leafNode_ResetPosture = std::unique_ptr<RobotResetPostureNode>{new RobotResetPostureNode(1200, &systems.timer, &robot)};
     // Leaf:EmitEventInactive
     auto leafNode_EmitInactive = std::unique_ptr<BTLeafNode<BehaviorContext *>>{new BTLeafNode<BehaviorContext *>(
         [&](BehaviorContext *ctx) {},
@@ -181,7 +180,7 @@ void Controller::setupBehaviors()
     selNode_InitializerSelector->addChildNode(std::move(conNode_IsInactive));
     selNode_InitializerSelector->addChildNode(std::move(seqNode_MainSequence));
     conNode_CheckPhoneFSR->setChildNode(std::move(selNode_InitializerSelector));
-    seqNode_MainInactiveSequence->addChildNode(std::move(leafNode_ResetArms));
+    seqNode_MainInactiveSequence->addChildNode(std::move(leafNode_ResetPosture));
     seqNode_MainInactiveSequence->addChildNode(std::move(leafNode_EmitInactive));
     selNode_RootSelector->addChildNode(std::move(conNode_CheckPhoneFSR));
     selNode_RootSelector->addChildNode(std::move(leafNode_SetInactive));
@@ -198,7 +197,7 @@ RobotHelloWorldNode::RobotHelloWorldNode(
       m_animationLeftArmReady{1000, robot->leftArm, Arm::Angles<std::int32_t>{140, 40, 70}},
       m_animationRightArmReady{1000, robot->rightArm, Arm::Angles<std::int32_t>{130, 40, 170}},
       m_animationLeftArmWave{1500, robot->leftArm, Arm::Angles<std::int32_t>{128, 28, 53}},
-      m_animationRightArmWave{500, robot->rightArm, Arm::Angles<std::int32_t>{115, 20, 75}, std::uint8_t(2), true},
+      m_animationRightArmWave{500, robot->rightArm, Arm::Angles<std::int32_t>{115, 20, 55}, std::uint8_t(2), true},
       BTLeafNode{
           [&](BehaviorContext *ctx)
           {
@@ -227,7 +226,7 @@ RobotHelloWorldNode::RobotHelloWorldNode(
 {
 }
 
-RobotResetPositionNode::RobotResetPositionNode(
+RobotResetPostureNode::RobotResetPostureNode(
     std::uint16_t totalDurationMs,
     Timer *timer,
     Robot *robot)
