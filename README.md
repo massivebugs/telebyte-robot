@@ -46,4 +46,4 @@ The dc motors on the chassis will probably be replaced for ones with rotary enco
 
 ## Contact
 
-Shira - massivebugs@protonmail.com
+massivebugs@protonmail.com
