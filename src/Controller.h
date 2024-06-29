@@ -10,7 +10,11 @@
 
 struct BehaviorContext
 {
-    bool isActive{false};
+    Timer *timer;
+    bool isActive{0};
+
+    // for ConditionalDelay:PhoneFSRTimeThreshold
+    long long fsrThresholdPassedMs{0};
 };
 
 class Controller
@@ -33,15 +37,22 @@ private:
 };
 
 // ##### Custom leaf node definitions ##### //
+class SequenceDelayNode : public BTLeafNode<BehaviorContext *>
+{
+public:
+    SequenceDelayNode(long long seconds);
+
+private:
+    long long m_lengthMs;
+    long long m_initMs{0};
+};
 
 class RobotHelloWorldNode : public BTLeafNode<BehaviorContext *>
 {
 public:
-    RobotHelloWorldNode(Timer *timer, Robot *robot);
+    RobotHelloWorldNode(Robot *robot);
 
 private:
-    Timer *m_timer;
-
     // ----- Animation Sequences ----- //
     // To position
     AnimationRotateArm m_animationLeftArmReady;
@@ -54,10 +65,9 @@ private:
 class RobotResetPostureNode : public BTLeafNode<BehaviorContext *>
 {
 public:
-    RobotResetPostureNode(std::uint16_t totalDurationMs, Timer *timer, Robot *robot);
+    RobotResetPostureNode(std::uint16_t totalDurationMs, Robot *robot);
 
 private:
-    Timer *m_timer;
     AnimationRotateArm m_animationLeftArm;
     AnimationRotateArm m_animationRightArm;
 };

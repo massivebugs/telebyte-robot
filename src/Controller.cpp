@@ -9,6 +9,9 @@ void Controller::setup()
     setupAPIEndpoints();
     setupBehaviors();
 
+    // Set system timer in Behavior Context
+    ctx.timer = &systems.timer;
+
     // Reset to robot's initial position
     robot.leftArm->rotate(115, 15, 35);
     robot.rightArm->rotate(45, 135, 125);
@@ -113,6 +116,21 @@ void Controller::setupBehaviors()
         {
             return robot.isPhoneSet();
         })};
+    // Condition:PhoneFSRTimeThreshold
+    auto conDelayNode_PhoneFSRTimeThreshold = std::unique_ptr<BTConditionalDelayNode<BehaviorContext *>>{new BTConditionalDelayNode<BehaviorContext *>(
+        [&](BehaviorContext *ctx)
+        {
+            ctx->fsrThresholdPassedMs = ctx->timer->getElapsedMilliseconds();
+        },
+        [&](BehaviorContext *ctx)
+        {
+            if (!ctx->isActive)
+            {
+                systems.logger->logn("conNode_PhoneFSRTimeThreshold", "Waiting for FSR time threshold...");
+                return ctx->timer->getElapsedMilliseconds() - ctx->fsrThresholdPassedMs > 2000;
+            }
+            return true;
+        })};
     // Selector:InitializerSelector
     auto selNode_InitializerSelector = std::unique_ptr<BTSelectorNode<BehaviorContext *>>{new BTSelectorNode<BehaviorContext *>()};
     // Condition:IsInactive
@@ -137,7 +155,7 @@ void Controller::setupBehaviors()
             return BTNodeStatus::Fail;
         })};
     // Leaf:DoHelloWorld
-    auto leafNode_DoHelloWorld = std::unique_ptr<BTLeafNode<BehaviorContext *>>{new RobotHelloWorldNode(&systems.timer, &robot)};
+    auto leafNode_DoHelloWorld = std::unique_ptr<BTLeafNode<BehaviorContext *>>{new RobotHelloWorldNode(&robot)};
     // Sequence:MainSequence
     auto seqNode_MainSequence = std::unique_ptr<BTSequenceNode<BehaviorContext *>>{new BTSequenceNode<BehaviorContext *>()};
     // Leaf:LofEndOfSequence
@@ -145,6 +163,7 @@ void Controller::setupBehaviors()
         [&](BehaviorContext *ctx) {},
         [&](BehaviorContext *ctx)
         {
+            systems.logger->logn("leafNode_LogEndOfSequence", "End of main sequence");
             return BTNodeStatus::Success;
         })};
     // Leaf:SetInactive
@@ -163,7 +182,7 @@ void Controller::setupBehaviors()
     // Sequence:MainInactiveSequence
     auto seqNode_MainInactiveSequence = std::unique_ptr<BTSequenceNode<BehaviorContext *>>{new BTSequenceNode<BehaviorContext *>()};
     // Leaf:ResetPosture
-    auto leafNode_ResetPosture = std::unique_ptr<RobotResetPostureNode>{new RobotResetPostureNode(1200, &systems.timer, &robot)};
+    auto leafNode_ResetPosture = std::unique_ptr<RobotResetPostureNode>{new RobotResetPostureNode(1200, &robot)};
     // Leaf:EmitEventInactive
     auto leafNode_EmitInactive = std::unique_ptr<BTLeafNode<BehaviorContext *>>{new BTLeafNode<BehaviorContext *>(
         [&](BehaviorContext *ctx) {},
@@ -179,7 +198,8 @@ void Controller::setupBehaviors()
     seqNode_MainSequence->addChildNode(std::move(leafNode_LogEndOfSequence));
     selNode_InitializerSelector->addChildNode(std::move(conNode_IsInactive));
     selNode_InitializerSelector->addChildNode(std::move(seqNode_MainSequence));
-    conNode_CheckPhoneFSR->setChildNode(std::move(selNode_InitializerSelector));
+    conDelayNode_PhoneFSRTimeThreshold->setChildNode(std::move(selNode_InitializerSelector));
+    conNode_CheckPhoneFSR->setChildNode(std::move(conDelayNode_PhoneFSRTimeThreshold));
     seqNode_MainInactiveSequence->addChildNode(std::move(leafNode_ResetPosture));
     seqNode_MainInactiveSequence->addChildNode(std::move(leafNode_EmitInactive));
     selNode_RootSelector->addChildNode(std::move(conNode_CheckPhoneFSR));
@@ -190,11 +210,32 @@ void Controller::setupBehaviors()
 
 // ##### Custom leaf node implementations ##### //
 
+SequenceDelayNode::SequenceDelayNode(long long seconds)
+    : m_lengthMs{seconds},
+      BTLeafNode{
+          [&](BehaviorContext *ctx)
+          {
+              m_initMs = 0;
+          },
+          [&](BehaviorContext *ctx)
+          {
+              auto elapsedMs = ctx->timer->getElapsedMilliseconds();
+              if (m_initMs == 0)
+              {
+                  m_initMs = elapsedMs;
+              }
+
+              return elapsedMs - m_initMs > m_lengthMs
+                         ? BTNodeStatus::Success
+                         : BTNodeStatus::Running;
+          },
+      }
+{
+}
+
 RobotHelloWorldNode::RobotHelloWorldNode(
-    Timer *timer,
     Robot *robot)
-    : m_timer{timer},
-      m_animationLeftArmReady{1000, robot->leftArm, Arm::Angles<std::int32_t>{140, 40, 70}},
+    : m_animationLeftArmReady{1000, robot->leftArm, Arm::Angles<std::int32_t>{140, 40, 70}},
       m_animationRightArmReady{1000, robot->rightArm, Arm::Angles<std::int32_t>{130, 40, 170}},
       m_animationLeftArmWave{1500, robot->leftArm, Arm::Angles<std::int32_t>{128, 28, 53}},
       m_animationRightArmWave{500, robot->rightArm, Arm::Angles<std::int32_t>{115, 20, 55}, std::uint8_t(2), true},
@@ -209,16 +250,16 @@ RobotHelloWorldNode::RobotHelloWorldNode(
           [&](BehaviorContext *ctx)
           {
               // ----- Perform sequence ----- //
-              auto r1 = m_animationLeftArmReady.animate(m_timer->getElapsedMilliseconds());
-              auto r2 = m_animationRightArmReady.animate(m_timer->getElapsedMilliseconds());
+              auto r1 = m_animationLeftArmReady.animate(ctx->timer->getElapsedMilliseconds());
+              auto r2 = m_animationRightArmReady.animate(ctx->timer->getElapsedMilliseconds());
 
               if (!(r1 && r2))
               {
                   return BTNodeStatus::Running;
               }
 
-              auto r3 = m_animationLeftArmWave.animate(m_timer->getElapsedMilliseconds());
-              auto r4 = m_animationRightArmWave.animate(m_timer->getElapsedMilliseconds());
+              auto r3 = m_animationLeftArmWave.animate(ctx->timer->getElapsedMilliseconds());
+              auto r4 = m_animationRightArmWave.animate(ctx->timer->getElapsedMilliseconds());
 
               return r3 && r4 ? BTNodeStatus::Success
                               : BTNodeStatus::Running;
@@ -228,10 +269,8 @@ RobotHelloWorldNode::RobotHelloWorldNode(
 
 RobotResetPostureNode::RobotResetPostureNode(
     std::uint16_t totalDurationMs,
-    Timer *timer,
     Robot *robot)
-    : m_timer{timer},
-      m_animationLeftArm{totalDurationMs, robot->leftArm, Arm::Angles<std::int32_t>{115, 15, 35}},
+    : m_animationLeftArm{totalDurationMs, robot->leftArm, Arm::Angles<std::int32_t>{115, 15, 35}},
       m_animationRightArm{totalDurationMs, robot->rightArm, Arm::Angles<std::int32_t>{45, 135, 125}},
       BTLeafNode{
           [&](BehaviorContext *ctx)
@@ -241,8 +280,8 @@ RobotResetPostureNode::RobotResetPostureNode(
           },
           [&](BehaviorContext *ctx)
           {
-              auto r1 = m_animationLeftArm.animate(m_timer->getElapsedMilliseconds());
-              auto r2 = m_animationRightArm.animate(m_timer->getElapsedMilliseconds());
+              auto r1 = m_animationLeftArm.animate(ctx->timer->getElapsedMilliseconds());
+              auto r2 = m_animationRightArm.animate(ctx->timer->getElapsedMilliseconds());
 
               return r1 && r2 ? BTNodeStatus::Success
                               : BTNodeStatus::Running;

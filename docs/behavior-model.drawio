@@ -1,22 +1,19 @@
 <mxfile host="65bd71144e" scale="1" border="20">
     <diagram id="UHCWGTYehqS4aXibi6Wu" name="Page-1">
-        <mxGraphModel dx="1826" dy="659" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#F5F5F5" math="0" shadow="0">
+        <mxGraphModel dx="2520" dy="1098" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#F5F5F5" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="3" target="37" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="3" target="44" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="68" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="3" target="30" edge="1">
+                <mxCell id="83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="3" target="77">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="430" y="340"/>
-                            <mxPoint x="760" y="340"/>
+                            <mxPoint x="430" y="360"/>
+                            <mxPoint x="860" y="360"/>
                         </Array>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="91" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="3" target="37">
+                    <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="3" value="&amp;lt;Selector:RootSelector&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="280" y="240" width="200" height="40" as="geometry"/>
@@ -27,8 +24,8 @@
                 <mxCell id="36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="30" target="35" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="30" value="&amp;lt;Sequence:MainInactiveSequence&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="660" y="640" width="200" height="40" as="geometry"/>
+                <mxCell id="30" value="&amp;lt;Sequence:ToActiveStateTransition&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="570" y="700" width="280" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="31" target="3" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -37,66 +34,80 @@
                     <mxGeometry x="320" y="100" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="33" value="&amp;lt;Leaf:ResetPosture&amp;gt;&lt;br&gt;Resets the robot to it's&lt;br&gt;initial posture (arm down)" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="500" y="780" width="210" height="80" as="geometry"/>
+                    <mxGeometry x="450" y="840" width="210" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="35" value="&amp;lt;Leaf:EmitEventInactive&amp;gt;&lt;br&gt;Emit event: Inactive" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="830" y="780" width="180" height="80" as="geometry"/>
+                <mxCell id="35" value="&amp;lt;Leaf:SetInactive&amp;gt;&lt;br&gt;Emit event: Inactive" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="780" y="840" width="180" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="37" target="63" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
+                <mxCell id="74" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;" parent="1" source="37" target="78" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="75" y="599.9999999999998" as="targetPoint"/>
+                    </mxGeometry>
                 </mxCell>
-                <mxCell id="37" value="&amp;lt;Condition:CheckPhoneFSR&amp;gt;&lt;br&gt;Phone is placed&lt;br&gt;on FSR strip" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="-40" y="400" width="230" height="120" as="geometry"/>
-                </mxCell>
-                <mxCell id="44" value="&amp;lt;Leaf:SetInactive&amp;gt;&lt;br&gt;Return active status" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="320" y="420" width="120" height="80" as="geometry"/>
+                <mxCell id="37" value="&amp;lt;Condition:CheckPhoneFSR&amp;gt;&lt;br&gt;SUCCESS if PhoneFSR pressure&lt;br&gt;is above threshold" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="-230" y="300" width="230" height="120" as="geometry"/>
                 </mxCell>
                 <mxCell id="49" value="&amp;lt;Leaf:SetActive&amp;gt;&lt;br&gt;Change state to ACTIVE" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="-690" y="1220" width="175" height="80" as="geometry"/>
+                    <mxGeometry x="-340" y="840" width="175" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="57" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;" parent="1" source="70" target="49" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="50" value="&amp;lt;Sequence:MainSequence&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="30" y="890" width="350" height="40" as="geometry"/>
+                <mxCell id="50" value="&amp;lt;Sequence:MainActive&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="-15" y="600" width="230" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="54" value="&amp;lt;Leaf:LogEndOfSequence&amp;gt;&lt;br&gt;Log end of sequence" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="310" y="1030" width="180" height="80" as="geometry"/>
+                    <mxGeometry x="130" y="840" width="180" height="80" as="geometry"/>
                 </mxCell>
                 <mxCell id="56" style="rounded=0;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="50" target="54" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="-313.31999999999994" y="941.56" as="sourcePoint"/>
-                        <mxPoint x="-390" y="1050" as="targetPoint"/>
+                        <mxPoint x="-203.31999999999994" y="1131.56" as="sourcePoint"/>
+                        <mxPoint x="-280" y="1240" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="58" value="&amp;lt;Leaf:DoHelloWorld&amp;gt;&lt;br&gt;Waves hand to say hi!" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="-350" y="1220" width="180" height="80" as="geometry"/>
+                    <mxGeometry x="-570" y="840" width="180" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="60" target="70" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="60" value="&amp;lt;Condition:IsInactive&amp;gt;&lt;br&gt;Returns true if Robot is INACTIVE" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="-540" y="850" width="220" height="120" as="geometry"/>
-                </mxCell>
-                <mxCell id="64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="63" target="60" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="63" target="50" edge="1">
+                <mxCell id="71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="88" target="70" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="-65" y="770"/>
-                            <mxPoint x="205" y="770"/>
-                        </Array>
+                        <mxPoint x="-370.0000000000002" y="700" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="63" value="&amp;lt;Selector:InitializerSelector&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="-305" y="640" width="320" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="70" target="58" edge="1">
+                <mxCell id="92" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="70" target="58">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="70" value="&amp;lt;Sequence:StateTransitionSequence&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="-542.5" y="1060" width="225" height="40" as="geometry"/>
+                <mxCell id="93" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="70" target="49">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="70" value="&amp;lt;Sequence:ToInactiveStateTransition&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="-472.5" y="700" width="225" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="82" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="76" target="30">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="76" value="&amp;lt;Condition:IsActive&amp;gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="590" y="590" width="240" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="80" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;" edge="1" parent="1" source="77" target="76">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="86" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="77" target="85">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="77" value="&amp;lt;Selector:FSROff&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="760" y="480" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="78" target="88">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="78" target="50">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="78" value="&amp;lt;Selector:FSROn&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-215" y="480" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="85" value="&amp;lt;Leaf:ProcessDelay&amp;gt;&lt;br&gt;Don't do anything, wait&lt;br&gt;for 2 seconds" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="960" y="590" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="88" value="&amp;lt;Condition:IsInActive&amp;gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-480" y="590" width="240" height="60" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

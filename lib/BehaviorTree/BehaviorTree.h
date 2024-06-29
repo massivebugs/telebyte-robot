@@ -312,7 +312,8 @@ public:
 template <typename T>
 class BTConditionNode : public IBTDecoratorNode<T>, public IBTNode<T>
 {
-private:
+protected:
+    std::function<void(T)> initializeFunc;
     std::function<bool(T)> checkFunc;
 
 public:
@@ -321,7 +322,19 @@ public:
      *
      * @param func The function used to check the condition.
      */
-    BTConditionNode(std::function<bool(T)> func) : checkFunc(func) {}
+    BTConditionNode(std::function<bool(T)> func)
+        : initializeFunc([](T) {}),
+          checkFunc(func) {}
+
+    /**
+     * @brief Constructs a new BTConditionNode object.
+     *
+     * @param initializeFunc The function used to initialize the node.
+     * @param func The function used to check the condition.
+     */
+    BTConditionNode(std::function<void(T)> initializeFunc, std::function<bool(T)> checkFunc)
+        : initializeFunc(initializeFunc),
+          checkFunc(checkFunc) {}
 
     /**
      * @brief Initializes the condition node and it's child.
@@ -330,6 +343,7 @@ public:
      */
     void initialize(T ctx) override
     {
+        initializeFunc(ctx);
         this->initializeChildNode(ctx);
     }
 
@@ -352,6 +366,48 @@ public:
             return state;
         }
         return BTNodeStatus::Fail;
+    }
+};
+
+/**
+ * @brief BTConditionalDelayNode runs its child only if the checkFunc returns true.
+ *
+ * This class represents a conditional delay node in a behavior tree.
+ * It checks a condition using a provided function, then executes its child node only if the condition is true.
+ * The difference with this and a BTConditionNode is that this will return BTNodeStatus::Running while it's condition hasn't been met.
+ *
+ * @tparam T Context type.
+ */
+template <typename T>
+class BTConditionalDelayNode : public BTConditionNode<T>
+{
+public:
+    /**
+     * @brief Constructs a new BTConditionalDelayNode object.
+     *
+     * @param func The function used to check the condition.
+     */
+    BTConditionalDelayNode(std::function<bool(T)> func)
+        : BTConditionNode<T>(func) {}
+
+    /**
+     * @brief Constructs a new BTConditionalDelayNode object.
+     *
+     * @param initializeFunc The function used to initialize the node.
+     * @param func The function used to check the condition.
+     */
+    BTConditionalDelayNode(std::function<void(T)> initializeFunc, std::function<bool(T)> checkFunc)
+        : BTConditionNode<T>(initializeFunc, checkFunc) {}
+
+    BTNodeStatus tick(T ctx) override
+    {
+        if (this->isRunning || this->checkFunc(ctx))
+        {
+            BTNodeStatus state = this->child->tick(ctx);
+            this->isRunning = state == BTNodeStatus::Running;
+            return state;
+        }
+        return BTNodeStatus::Running;
     }
 };
 
